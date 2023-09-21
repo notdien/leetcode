@@ -1,38 +1,100 @@
-class Solution():
-    def __init__(self):
-        pass
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
 
-    def solved(self, x):
-        # initiate a binary search
-        low = 1
-        high = x
+    def inOrderTraversal(self, root):
+        if root:
+            self.inOrderTraversal(root.left)
 
-        # we need a variable to store our return value
-        sqrt = x
+            print(root.data, end="->")
 
-        while low <= high:
-            # if we just do low+high/2, the low+high = 3,000,000,001, which will result in overflow error
-            mid = int(low + (high-low)/2)
-            print(mid)
+            self.inOrderTraversal(root.right)
 
-            # if we get a case of 2x2 = 4, then we just return 2
-            if mid*mid == x:
-                return mid
-            # if comparison is higher, go lower
-            # we go towards the left side
-            elif mid*mid > x:
-                high = mid - 1
-            # if it is comparison is smaller, it might be the correct answer
-            else:
-                sqrt = mid
-                # checks to make sure if there are no numbers bigger that could be sqrt root
-                # if there is - repeats loop
-                # otherwise we just return sqrt
-                low = mid + 1
+    def createList(self, root, output=[]):
+        if root:
+            self.createList(root.left, output)
+            # output += [root.data]
+            output.append(root.data)
+            self.createList(root.right, output)
 
-        return sqrt
+        return output
+
+    # not recursive way
+    def addNode(self, root):
+        if root is None:
+            return []
+        return self.addNode(root.left) + [root.data] + self.addNode(root.right)
 
 
-# initiate a object
-result = Solution()
-print(result.solved(9))
+# preOrder
+def preOrder(root):
+    if root:
+        # print val of root
+        print(root.data, end="->")
+
+        # then go to the left child
+        preOrder(root.left)
+
+        # finally go to right child
+        preOrder(root.right)
+
+
+# inOrder
+def inOrder(root):
+    if root:
+        # prints the value of left first
+        inOrder(root.left)
+        print(root.data, end="->")
+
+        # finally go to the right
+        inOrder(root.right)
+
+
+# postOrder
+def postOrder(root):
+    if root:
+        # prints bottom rows first
+        postOrder(root.left)
+        postOrder(root.right)
+
+        # finally print root
+        print(root.data, end="->")
+
+
+# create an object
+# root = Node(1)
+# root.right = Node(2)
+# root.right.left = Node(3)
+
+# example from book
+root = Node(1)
+root.left = Node(2)
+root.right = Node(3)
+root.left.left = Node(4)
+root.left.right = Node(5)
+root.right.left = Node(6)
+root.right.right = Node(7)
+
+# print preOrder
+print("preOrder traversal")
+preOrder(root)
+print("\n")
+print("inOrder traversal")
+inOrder(root)
+print("\n")
+print("postOrder traversal")
+postOrder(root)
+
+# print("\n")
+# print("Testing object method:")
+# print(root.inOrderTraversal(root))
+
+print("\n")
+print("Returned as an array: ")
+print(root.createList(root))
+
+print("\n")
+print("Non-recursive way")
+print(root.addNode(root))
